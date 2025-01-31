@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Links Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .game-list {
+            list-style: none;
+            padding: 0;
+        }
+        .game-list li {
+            background: #1e1e1e;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .dashboard {
+            margin-top: 20px;
+            padding: 15px;
+            background: #222;
+            border-radius: 5px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Box</h1>
+        <ul class="game-list" id="gameList"></ul>
+        
+        <div class="dashboard">
+            <h2>Admin Panel</h2>
+            <input type="text" id="gameName" placeholder="Game Name">
+            <input type="url" id="gameLink" placeholder="Game Link">
+            <button onclick="addGame()">Add Game</button>
+        </div>
+    </div>
+
+    <script>
+        let games = JSON.parse(localStorage.getItem("games")) || [];
+
+        function displayGames() {
+            let gameList = document.getElementById("gameList");
+            gameList.innerHTML = "";
+            games.forEach((game, index) => {
+                gameList.innerHTML += `<li>
+                    <a href="${game.link}" target="_blank">${game.name}</a>
+                    <button onclick="deleteGame(${index})">❌</button>
+                </li>`;
+            });
+        }
+
+        function addGame() {
+            let name = document.getElementById("gameName").value;
+            let link = document.getElementById("gameLink").value;
+            if (name && link) {
+                games.push({ name, link });
+                localStorage.setItem("games", JSON.stringify(games));
+                displayGames();
+            }
+        }
+
+        function deleteGame(index) {
+            games.splice(index, 1);
+            localStorage.setItem("games", JSON.stringify(games));
+            displayGames();
+        }
+
+        displayGames();
+    </script>
+</body>
+</html>
